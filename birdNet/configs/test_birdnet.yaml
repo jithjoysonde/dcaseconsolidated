@@ -1,0 +1,152 @@
+# @package _global_
+
+# Testing configuration for BirdNet embeddings
+defaults:
+  - _self_
+  - datamodule: prototype.yaml
+  - model: birdnet_protonet.yaml  # Use BirdNet encoder
+  - callbacks: default.yaml
+  - logger: wandb.yaml
+  - trainer: default.yaml
+  - log_dir: default.yaml
+
+  # experiment configs allow for version control of specific configurations
+  - experiment: null
+
+  # debugging config
+  - debug: null
+
+  # config for hyperparameter optimization
+  - hparams_search: null
+
+  # optional local config for machine/user specific settings
+  - optional local: default.yaml
+
+  # enable color logging
+  - override hydra/hydra_logging: colorlog
+  - override hydra/job_logging: colorlog
+
+# Hydra verbose logging for more insights
+hydra:
+  verbose: true
+
+# path to original working directory
+original_work_dir: ${hydra:runtime.cwd}
+
+# path to folder with data
+data_dir: /data/msc-proj/
+
+# pretty print config at the start of the run using Rich library
+print_config: True
+
+# disable python warnings if they annoy you
+ignore_warnings: True
+
+# set False to skip model training
+train: False
+
+# evaluate on test set
+test_after_training: True
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 1234
+
+# Experiment name for logging
+exp_name: "birdnet_test"
+name: "birdnet_test"
+
+# Test-specific parameters
+test: True
+
+# Model checkpoint to load for testing
+ckpt_path: null  # Will be set when running test
+
+# Path configuration
+path:
+  train_dir: /data/msc-proj/Training_Set/
+  val_dir: /data/msc-proj/Validation_Set_DSAI_2025_2026/
+  test_dir: /data/msc-proj/Validation_Set_DSAI_2025_2026/  # Use validation directory for testing since test data not available
+  eval_dir: /data/msc-proj/Validation_Set_DSAI_2025_2026/  # Required for evaluation metrics
+  embedding_dim: 6522  # BirdNet V2.4 embedding dimension
+  # BirdNet-specific parameters (for reference, actual extraction done offline)
+  birdnet_model_path: /data/4joyson/bdnt/birdnet/weights/model/V2.4/BirdNET_GLOBAL_6K_V2.4_Model_FP32.tflite
+  birdnet_labels_path: /data/4joyson/bdnt/birdnet/weights/model/V2.4/labels.txt
+  n_fft: 1024  # Required by validation dataset (not used with BirdNet)
+  hop_length: 256
+  # PCEN parameters not used with BirdNet
+  pcen: false
+  feature_types: BDnet
+
+# Training parameters (used for dataset configuration)
+train_param:
+  sr: 22050
+  seg_len: 1.5  # Segment length in seconds for BirdNet
+  n_shot: 5
+  k_way: 10  # 10-way for testing
+  device: cuda
+  lr_rate: 0.001
+  scheduler_gamma: 0.5
+  scheduler_step_size: 10
+  epochs: 50
+  num_episodes: 2000
+  adaptive_seg_len: false  # Disable adaptive segment length for BirdNet
+  use_validation_first_5: false
+  negative_train_contrast: true
+  negative_seg_search: false
+  merging_segment: false
+  remove_long_segment: false
+  padd_tail: false
+
+# Evaluation parameters
+eval_param:
+  samples_neg: 150
+  iterations: 3
+  query_batch_size: 8
+  negative_set_batch_size: 16
+  threshold: 0.9
+  hop_seg: 0.75
+  seg_len: 1.5
+
+# Features configuration (BirdNet specific)
+features:
+  use_birdnet: true  # Enable BirdNet embeddings
+  seg_len: 1.5  # Segment length in seconds
+  hop_seg: 0.75  # Hop length in seconds
+  eps: 2.220446049250313e-16
+  fmax: 11025
+  fmin: 50
+  sr: 22050
+  n_fft: 1024
+  n_mels: 128
+  hop_mel: 256
+  feature_types: BDnet
+  embedding_dim: 2048  # Output dimension after projection layer (not raw BirdNet 6522)
+  drop_rate: 0.1
+  with_bias: false
+  non_linearity: leaky_relu
+  time_max_pool_dim: 4
+  layer_4: false
+  test_seglen_len_lim: 30
+  test_hoplen_fenmu: 3
+
+# Set configuration
+set:
+  n_way: 10  # 10-way testing
+  n_shot: 5  # 5-shot testing
+  n_query: 15  # Query samples per class
+  eval: true  # Enable evaluation metrics computation
+
+# Trainer configuration for testing
+trainer:
+  max_epochs: 1  # Only run testing, not training
+  limit_train_batches: 0  # No training batches
+  limit_val_batches: 0  # No validation batches
+  limit_test_batches: 1.0  # Run all test batches
+
+# Logger configuration
+logger:
+  wandb:
+    name: "birdnet_test"
+    project: "dcase2024-task5-birdnet"
+    tags: ["test", "birdnet", "10way-5shot"]
+    group: "testing"

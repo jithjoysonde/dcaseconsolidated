@@ -1,0 +1,56 @@
+
+ls -l Training_Set/BV/
+ls -l Training_Set/HT/
+ls -l Training_Set/JD/
+ls -l Training_Set/MT/
+ls -l Training_Set/WMW/
+
+cp Training_Set/BV/*.wav /data/msc-proj/Training_Set/BV
+cp Training_Set/HT/*.wav /data/msc-proj/Training_Set/HT
+cp Training_Set/JD/*.wav /data/msc-proj/Training_Set/JD
+cp Training_Set/MT/*.wav /data/msc-proj/Training_Set/MT
+cp Training_Set/WMW/*.wav /data/msc-proj/Training_Set/WMW
+
+
+ls -l Validation_Set/ME/
+ls -l Validation_Set_DSAI_2025_2026/ME/
+
+ls -l Validation_Set/PB/
+ls -l Validation_Set_DSAI_2025_2026/PB/
+
+ls -l Validation_Set/PB24/
+ls -l Validation_Set_DSAI_2025_2026/PB24/
+
+cp Validation_Set/ME/*.wav /data/msc-proj/Validation_Set_DSAI_2025_2026/ME
+cp Validation_Set/PB/*.wav /data/msc-proj/Validation_Set_DSAI_2025_2026/PB
+cp Validation_Set/PB24/*.wav /data/msc-proj/Validation_Set_DSAI_2025_2026/PB24
+
+
+ls -l Validation_Set/HB/
+ls -l Evaluation_Set_DSAI_2025_2026/HB/
+
+ls -l Validation_Set/PW/
+ls -l Evaluation_Set_DSAI_2025_2026/PW/
+
+ls -l Validation_Set/RD/
+ls -l Evaluation_Set_DSAI_2025_2026/RD/
+
+cp Validation_Set/HB/*.wav /data/msc-proj/Evaluation_Set_DSAI_2025_2026/HB/
+cp Validation_Set/PW/*.wav /data/msc-proj/Evaluation_Set_DSAI_2025_2026/PW/
+cp Validation_Set/RD/*.wav /data/msc-proj/Evaluation_Set_DSAI_2025_2026/RD/
+
+get https://zenodo.org/records/10829604/files/Development_set.zip   DCASE2024 new
+get https://zenodo.org/record/6482837/files/Development_Set.zip?download=1    DCASE2022 old
+
+source ./dcase_t5/bin/activate
+
+/data/msc-proj 
+/data/4joyson
+/export/home/4joyson/infhome/baseline/dcase-few-shot-bioacoustic/baselines/dcase2024_task5
+/export/home/4joyson/infhome/baseline/dcase-few-shot-bioacoustic/baselines/dcase2024_task5/configs
+
+Run 
+1. 
+python3 data_preparation.py --data-dir /data/msc-proj
+2. 
+python3 train.py features.feature_types="pcen"  train_param.negative_train_contrast=false

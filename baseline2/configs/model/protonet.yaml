@@ -1,0 +1,11 @@
+_target_: src.models.prototype_module.PrototypeModule
+train: ${train_param}
+path: ${path}
+features: ${features}
+eval: ${eval_param}
+set: ${set}
+
+net:
+  _target_: src.models.components.protonet.ResNet
+  features: ${features}
+  # _target_: src.models.components.protonet_old.Protonet

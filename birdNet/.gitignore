@@ -1,0 +1,26 @@
+# Virtual environments
+.venv/
+venv/
+
+# Logs
+*.log
+logs/
+
+# WandB
+wandb/
+
+# Large model files
+birdnet/weights/*.zip
+birdnet/weights/model/**/*.tflite
+birdnet/weights/model/**/*.pb
+birdnet/weights/model/**/variables/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+
+# Backup files
+*.bak

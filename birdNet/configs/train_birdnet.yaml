@@ -1,0 +1,123 @@
+# @package _global_
+
+# Training configuration for BirdNet embeddings
+defaults:
+  - _self_
+  - datamodule: prototype.yaml
+  - model: birdnet_protonet.yaml  # Use BirdNet encoder
+  - callbacks: default.yaml
+  - logger: wandb.yaml
+  - trainer: default.yaml
+  - log_dir: default.yaml
+
+  # experiment configs allow for version control of specific configurations
+  - experiment: null
+
+  # debugging config
+  - debug: null
+
+  # config for hyperparameter optimization
+  - hparams_search: null
+
+  # optional local config for machine/user specific settings
+  - optional local: default.yaml
+
+  # enable color logging
+  - override hydra/hydra_logging: colorlog
+  - override hydra/job_logging: colorlog
+
+# Hydra verbose logging for more insights
+hydra:
+  verbose: true
+
+# path to original working directory
+original_work_dir: ${hydra:runtime.cwd}
+
+# path to folder with data
+data_dir: /data/msc-proj/
+
+# pretty print config at the start of the run using Rich library
+print_config: True
+
+# disable python warnings if they annoy you
+ignore_warnings: True
+
+# set False to skip model training
+train: True
+
+# evaluate on test set
+test_after_training: True
+
+# seed for random number generators in pytorch, numpy and python.random
+seed: 1234
+
+# disable cudnn for deterministic training
+disable_cudnn: False
+
+# default name for the experiment, determines logging folder path
+# (you can overwrite this name in experiment configs)
+name: "birdnet_protonet"
+exp_name: "birdnet_protonet"
+
+path:
+  train_dir: ${data_dir}/Training_Set
+  eval_dir: ${data_dir}/Validation_Set_DSAI_2025_2026
+  test_dir: null  # Set to null or path to test directory
+  train_csv: ${data_dir}/Training_Set_classes.csv
+  eval_csv: ${data_dir}/Validation_Set_classes_DSAI_2025_2026.csv
+  mask_dir: ${data_dir}/Training_Set
+
+set:
+  train_csv: Training_Set_classes.csv
+  eval_csv: Validation_Set_classes_DSAI_2025_2026.csv
+  test_csv: null
+
+features:
+  use_birdnet: true  # Enable BirdNet embeddings
+  embedding_dim: 6522  # BirdNet V2.4 embedding dimension
+  # BirdNet-specific parameters (for reference, actual extraction done offline)
+  sr: 48000
+  hop_mel: 240  # Hop size in samples (48000/240 = 200 fps)
+  n_mels: 128
+  n_fft: 1024  # Required by validation dataset (not used with BirdNet)
+  fmin: 50
+  fmax: 11025
+  # PCEN parameters not used with BirdNet
+  pcen_norm_exponent: 0.8
+  feature_types: birdnet
+  drop_rate: 0.1
+  with_bias: false
+  non_linearity: leaky_relu
+  layer_4: false
+  time_max_pool_dim: 4
+
+train_param:
+  k_way: 10  # Number of classes per episode
+  n_shot: 5  # Number of samples per class
+  query_num: 5  # Number of query samples
+  seg_len: 1.5  # Segment length in seconds
+  hop_seg: 0.5  # Hop size for segments
+  negative_train_contrast: true  # Use contrastive learning
+  use_validation_first_5: true  # Use first 5 validation samples for training
+  adaptive_seg_len: false  # Disable adaptive segment length for BirdNet
+  lr_rate: 0.001  # Learning rate for Adam optimizer
+  scheduler_gamma: 0.65  # Learning rate decay factor
+  scheduler_step_size: 10  # Epochs between learning rate decay
+
+eval_param:
+  stm_path: ${original_work_dir}/src/models/eval_meta/subset_meta.csv
+  iterations: 5
+  n_shot: 5
+  seg_len: 1.5
+  time_ratio: 0.75
+  window_size: 0.02
+
+trainer:
+  max_epochs: 100
+  gpus: 1
+  accelerator: gpu
+
+logger:
+  wandb:
+    project: "dcase2024-task5-birdnet"
+    name: ${name}

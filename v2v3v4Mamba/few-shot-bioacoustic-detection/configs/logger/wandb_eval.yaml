@@ -1,0 +1,14 @@
+# https://wandb.ai
+
+wandb:
+  _target_: pytorch_lightning.loggers.wandb.WandbLogger
+  project: "eval_dcase_task5"
+  name: ${exp_name}
+  save_dir: "."
+  offline: False 
+  id: null 
+  log_model: True
+  prefix: ""
+  job_type: "train"
+  group: ""
+  tags: ["dynamic"]

@@ -1,0 +1,17 @@
+# Virtual environments
+.venv/
+venv/
+
+# Logs
+*.log
+logs/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+
+# Backup files
+*.bak

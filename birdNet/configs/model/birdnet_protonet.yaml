@@ -1,0 +1,13 @@
+_target_: src.models.prototype_module.PrototypeModule
+train: ${train_param}
+path: ${path}
+features: ${features}
+eval: ${eval_param}
+set: ${set}
+
+net:
+  _target_: src.models.components.birdnet_encoder.BirdNetEncoderWithProjection
+  embedding_dim: 6522  # BirdNet V2.4 produces 6522-dim embeddings
+  output_dim: 2048  # Project to same dimension as ResNet baseline for fair comparison
+  pooling: mean  # Options: 'mean', 'max', or 'both'
+  dropout: 0.1  # Dropout rate for projection layer
