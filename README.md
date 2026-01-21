@@ -21,7 +21,7 @@ This repository contains four different implementations for DCASE 2024 Task 5 (F
 └── v2v3v4Mamba/            # Multiple models
 ```
 
-## 🐍 Virtual Environment
+## Virtual Environment
 
 **For baseline1, baseline2, and birdNet:**
 - Shared virtual environment: `/data/4joyson/dcase_t5`
