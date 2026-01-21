@@ -163,7 +163,7 @@ cd /data/4joyson/consdtd/v2v3v4Mamba
 
 ### Important Notes
 
-⚠️ **v2v3v4Mamba uses a DIFFERENT virtual environment!**
+ **v2v3v4Mamba uses a DIFFERENT virtual environment!**
 
 This implementation:
 - Uses Mamba state-space models (requires `mamba-ssm>=1.0.1`)
@@ -186,40 +186,15 @@ Key differences from other baselines:
 
 ---
 
-## 📊 Performance Comparison
 
-| Model | F-measure (%) | F-measure avg (%) | Notes |
-|-------|---------------|-------------------|-------|
-| **Baseline 1 (ckpt1)** | 43.19 | 43.32 | epoch_011 |
-| **Baseline 1 (ckpt2)** | 42.47 | 43.70 | epoch_005 |
-| **Baseline 2 (ckpt1)** | 48.15 | 53.86 | epoch_002 ⭐ Best avg |
-| **Baseline 2 (ckpt2)** | 48.39 | 50.36 | epoch_004 |
-| **BirdNet** | TBD | TBD | Requires feature extraction |
-| **v2v3v4Mamba** | TBD | TBD | See v2v3v4Mamba/README.md |
 
 ---
 
-## 🔧 Common Configuration
-
-### Data Paths
-
-Update data paths in the respective config files:
-- Training data: Set in `configs/datamodule/*.yaml`
-- Evaluation data: Set in `configs/test.yaml`
-- Test data: Set in `configs/test.yaml`
-
-### Typical Config Structure
-
-```yaml
-datamodule:
-  train_dir: /path/to/training/data
-  eval_dir: /path/to/validation/data
-  test_dir: /path/to/test/data
 ```
 
 ---
 
-## 📝 Requirements Files
+## Requirements Files
 
 ### Baseline1, Baseline2, BirdNet
 - Similar dependencies (156-158 lines)
